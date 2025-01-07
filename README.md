@@ -1,6 +1,7 @@
 # sleepoutside
 
-## [Production Site](https://glittering-entremet-6267df.netlify.app)
+### [Link to production site:](https://glittering-entremet-6267df.netlify.app)
+### Hosted by [Netlify](app.netlify.com)
 
 ## Description
 
