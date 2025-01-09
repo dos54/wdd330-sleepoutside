@@ -16,7 +16,7 @@ export function setLocalStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(dataArray));
     //dataArray.push( JSON.parse(localStorage.getItem(key)));
   }
-  if (localStorage.getItem(key) != null) {
+  else {
     let dataArray = JSON.parse(localStorage.getItem(key));
     dataArray.unshift(data);
     localStorage.setItem(key, JSON.stringify(dataArray));
