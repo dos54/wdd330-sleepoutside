@@ -42,7 +42,7 @@ function showTotalPrice(localStorageKey,parentElementId,elementId, classHide, cl
   if (cartItems.lenght >= 1 || cartItems !== undefined){
     divElement.classList.remove(classHide);
     divElement.classList.add(classdisplay);
-    pElement.textContent = `Total $${price}`;
+    pElement.textContent = `Total $${price.toFixed(2)}`;
   }
 }
 
