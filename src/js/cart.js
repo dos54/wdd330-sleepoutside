@@ -39,7 +39,7 @@ function showTotalPrice(localStorageKey,parentElementId,elementId, classHide, cl
   const divElement = document.getElementById(parentElementId);
   const pElement = document.getElementById(elementId);
   const cartItems = getLocalStorage(localStorageKey);
-  if (cartItems[0] !== ""){
+  if (cartItems.lenght >= 1 || cartItems !== undefined){
     divElement.classList.remove(classHide);
     divElement.classList.add(classdisplay);
     pElement.textContent = `Total $${price}`;
