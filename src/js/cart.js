@@ -25,4 +25,28 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
+function getTotalPrice(localStorageKey){
+  const cartItems = getLocalStorage(localStorageKey);
+  let totalPrice = 0;
+  cartItems.forEach(item => {
+    totalPrice += item.FinalPrice;
+  });
+
+  return totalPrice;
+}
+
+function showTotalPrice(localStorageKey,parentElementId,elementId, classHide, classdisplay, price){
+  const divElement = document.getElementById(parentElementId);
+  const pElement = document.getElementById(elementId);
+  const cartItems = getLocalStorage(localStorageKey);
+  if (cartItems.lenght >= 1 || cartItems !== undefined){
+    divElement.classList.remove(classHide);
+    divElement.classList.add(classdisplay);
+    pElement.textContent = `Total $${price.toFixed(2)}`;
+  }
+}
+
 renderCartContents();
+showTotalPrice("so-cart", "total-price", "total-price-text", "cart-footer_hide", "cart-footer_display", getTotalPrice("so-cart"));
+
+
