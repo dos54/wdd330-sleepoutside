@@ -1,7 +1,7 @@
 import { getLocalStorage } from "./utils.mjs";
 
 function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart") || [];
+  const cartItems = getLocalStorage("so-cart");
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
   if (!cartItems.length) {
@@ -43,7 +43,7 @@ function showTotalPrice(localStorageKey,parentElementId,elementId, classHide, cl
   const divElement = document.getElementById(parentElementId);
   const pElement = document.getElementById(elementId);
   const cartItems = getLocalStorage(localStorageKey);
-  if (cartItems.lenght >= 1 || cartItems !== undefined){
+  if (cartItems.length >= 1){
     divElement.classList.remove(classHide);
     divElement.classList.add(classdisplay);
     pElement.textContent = `Total $${price.toFixed(2)}`;
