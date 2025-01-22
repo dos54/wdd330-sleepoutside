@@ -1,4 +1,4 @@
-import { addToLocalStorage } from "./utils.mjs";
+import { addToLocalStorage, getDiscount, isDiscounted } from "./utils.mjs";
 
 function productDetailsTemplate(product) {
   return `
@@ -13,7 +13,7 @@ function productDetailsTemplate(product) {
           alt="${product.NameWithoutBrand}"
         />
 
-        <p class="product-card__price">$${product.ListPrice}</p>
+        <p class="product-card__price">$${product.SuggestedRetailPrice.toFixed(2)}</p>
 
         <p class="product__color">${product.Colors[0].ColorName}</p>
 
@@ -65,5 +65,13 @@ export default class ProductDetails {
       "afterBegin",
       productDetailsTemplate(this.product),
     );
+
+    const listPrice = element.querySelector(".product-card__price");
+    if (isDiscounted(this.product)) {
+      listPrice.classList.add("discounted");
+      listPrice.insertAdjacentHTML("afterend", `
+        <p class="discounted-price">$${this.product.FinalPrice}</p>
+        `);
+    }
   }
 }
