@@ -44,6 +44,7 @@ function parseAndRemoveByUniqueId(uniqueItemId) {
   const updatedCart = cartItems.filter(
     (item) => item.cartItemId !== uniqueItemId,
   );
+
   return updatedCart;
 }
 
@@ -55,6 +56,14 @@ function parseAndRemoveByUniqueId(uniqueItemId) {
 function removeItemsFromCart(uniqueItemId) {
   let newCart = parseAndRemoveByUniqueId(uniqueItemId);
   localStorage.setItem("so-cart", JSON.stringify(newCart));
+  showTotalPrice(
+    "so-cart",
+    "total-price",
+    "total-price-text",
+    "cart-footer_hide",
+    "cart-footer_display",
+    getTotalPrice("so-cart"),
+  );
 }
 
 /**
