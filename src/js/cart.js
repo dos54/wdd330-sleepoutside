@@ -1,9 +1,13 @@
 import { getLocalStorage } from "./utils.mjs";
 
 function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart");
+  const cartItems = getLocalStorage("so-cart") || [];
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
+  if (!cartItems.length) {
+    document.querySelector(".product-list").innerHTML =
+      "<p>Your cart is empty.</p>";
+  }
 }
 //calls items from cart then compares them to the deleted item, first matching ID is removed then cart is overwritten
 function parseAndRemoveByID(itemID){
@@ -52,6 +56,27 @@ function cartItemTemplate(item) {
 </li>`;
 
   return newItem;
+}
+
+function getTotalPrice(localStorageKey){
+  const cartItems = getLocalStorage(localStorageKey);
+  let totalPrice = 0;
+  cartItems.forEach(item => {
+    totalPrice += item.FinalPrice;
+  });
+
+  return totalPrice;
+}
+
+function showTotalPrice(localStorageKey,parentElementId,elementId, classHide, classdisplay, price){
+  const divElement = document.getElementById(parentElementId);
+  const pElement = document.getElementById(elementId);
+  const cartItems = getLocalStorage(localStorageKey);
+  if (cartItems.lenght >= 1 || cartItems !== undefined){
+    divElement.classList.remove(classHide);
+    divElement.classList.add(classdisplay);
+    pElement.textContent = `Total $${price.toFixed(2)}`;
+  }
 }
 
 renderCartContents();
