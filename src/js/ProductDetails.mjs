@@ -1,4 +1,4 @@
-import { setLocalStorage } from "./utils.mjs";
+import { setLocalStorage, loadHeaderFooter } from "./utils.mjs";
 
 function productDetailsTemplate(product) {
     return `
@@ -62,3 +62,4 @@ export default class ProductDetails {
     )
   }
 }
+loadHeaderFooter();

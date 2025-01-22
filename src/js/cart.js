@@ -30,6 +30,7 @@ function removeItemsFromCart(itemID){
   let newCart = parseAndRemoveByID(itemID);
   localStorage.setItem('so-cart', JSON.stringify(newCart));
   console.log('removed');
+  renderCartContents();
 };
 
 function buildCartControls(){
@@ -80,4 +81,4 @@ function showTotalPrice(localStorageKey,parentElementId,elementId, classHide, cl
 }
 
 renderCartContents();
-buildCartControls();
+

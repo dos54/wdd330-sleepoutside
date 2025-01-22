@@ -45,3 +45,32 @@ export function renderListWithTemplate(templateFn, parentElement, list, position
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
+export function renderWithTemplate(template, parentElement, callback, data){
+  parentElement.insertAdjacentHTML("afterbegin", template);
+  if(callback){
+    callback(data);
+  }
+}
+function converToText(response){
+  return response.text();
+}
+export async function loadPartial(path) {
+  const partalHTML = await fetch(path).then(converToText);
+  const partial = document.createElement('template');
+  partial.innerHTML = partalHTML;
+  return partial;
+}
+
+export async function loadHeaderFooter() {
+    const headerPath = '/partials/header.html';  
+    const footerPath = '/partials/footer.html';  
+
+    const headerElement = document.getElementById('header');  
+
+    const headerTemplate = await loadPartial(headerPath);  
+    renderWithTemplate(headerTemplate.innerHTML, headerElement);    
+
+    const footerElement = document.getElementById('footer');  
+    const footerTemplate = await loadPartial(footerPath);  
+    renderWithTemplate(footerTemplate.innerHTML, footerElement);
+  } 
