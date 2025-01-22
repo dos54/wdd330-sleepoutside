@@ -201,10 +201,10 @@ button {
   grid-row: 2;
   grid-column: 3;
 }
-.cart-footer_hide{
+.cart-footer_hide {
   display: none;
 }
-.cart-footer_display{
+.cart-footer_display {
   display: flex;
   padding-left: 2%;
 }
