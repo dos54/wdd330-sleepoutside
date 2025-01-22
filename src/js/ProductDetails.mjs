@@ -22,7 +22,7 @@ function productDetailsTemplate(product) {
         </p>
 
         <div class="product-detail__add">
-          <button id="addToCart" data-id="${ product.Id}">
+          <button id="addToCart" data-id="${product.Id}">
             Add to Cart
           </button>
         </div>
@@ -51,7 +51,12 @@ export default class ProductDetails {
   }
   
   addProductToCart() {
-    setLocalStorage("so-cart", this.product);
+    const cartItem = {
+      ...this.product,
+      cartItemId: Date.now() + Math.random().toString(36).substring(2, 9) // Solve the issue of items having the same ID by assigning the product a unique id when added to the cart
+    }
+    
+    setLocalStorage("so-cart", cartItem);
   }
 
   renderProductDetails(selector) {
