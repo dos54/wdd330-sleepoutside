@@ -154,6 +154,11 @@ button {
 .card__name {
   font-size: 1em;
 }
+
+.discounted {
+  text-decoration: line-through;
+  color: red;
+}
 /* End product list card */
 
 .product-detail {
