@@ -133,7 +133,18 @@ button {
   text-decoration: none;
   color: var(--dark-grey);
 }
-/* Styles for product lists */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6em;
+  padding: 0.25em;
+  list-style-type: none;
+  text-align: center;
+}
+.product-grid a {
+  text-decoration: none;
+  color: var(--dark-grey);
+}
 .product-card {
   flex: 1 1 45%;
   margin: 0.25em;
