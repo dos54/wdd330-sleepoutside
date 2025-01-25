@@ -161,7 +161,7 @@ export async function loadHeaderFooter() {
  * @param {number} item.FinalPrice - The final price of the item.
  * @returns {boolean} - Returns true if the item is discounted, false otherwise.
  */
-export function isDiscounted(item) {
+export function isDiscounted(item) { 
   return (
     typeof item.SuggestedRetailPrice === "number" &&
     typeof item.FinalPrice === "number" &&
