@@ -145,6 +145,8 @@ button {
   text-decoration: none;
   color: var(--dark-grey);
 }
+
+/* Styles for product lists */
 .product-card {
   flex: 1 1 45%;
   margin: 0.25em;

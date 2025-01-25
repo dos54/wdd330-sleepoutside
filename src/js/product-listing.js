@@ -17,10 +17,12 @@ const listing = new ProductList(category, dataSource, liElement);
 // Load reusable header and footer components
 loadHeaderFooter();
 
+// Changes title and h2 to match the category of products to be renderd
 const title = document.querySelector("title");
-title.textContent = `Sleep Outside | Top ${category.split("-").map(capitalizeString).join(" ")}`;
-document.querySelector("h2").innerText =
-  `Top ${category.split("-").map(capitalizeString).join(" ")}`;
+const h2 = document.querySelector("h2");
+const formatedCategoryString = category.split("-").map(capitalizeString).join(" ");
+title.textContent = `Sleep Outside | Top ${formatedCategoryString}`;
+h2.innerText =`Top ${formatedCategoryString}`;
 
-// Render the product
+// Render the products
 listing.init();
