@@ -32,7 +32,6 @@ export default class ShoppingCart {
    * @returns {string} - The HTML template string for the cart item.
    */
   cartItemTemplate(item) {
-    console.log(item);
     const newItem = `
         <a href="#" class="cart-card__image">
             <img
@@ -48,8 +47,6 @@ export default class ShoppingCart {
         <p class="cart-card__price">$${item.FinalPrice}</p>
         <button>Remove Item</button>
         `;
-
-        // console.log(newItem)
 
     return newItem;
   }
