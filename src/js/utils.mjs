@@ -112,6 +112,7 @@ export function renderListWithTemplate(
  *                                           Must be one of: "beforebegin", "afterbegin", "beforeend", "afterend"
  */
 export function renderWithTemplate(template, parent, data, callback) {
+  
   parent.insertAdjacentHTML("afterbegin", template);
   if (callback) {
     callback(data);
@@ -140,17 +141,22 @@ export async function loadTemplate(path) {
 /**
  * Load the headers and footers
  */
-export async function loadHeaderFooter() {
+export async function loadHeaderFooter(dataLoad, numberOfItemsFunction) {
   const headerPath = "/partials/header.html";
   const footerPath = "/partials/footer.html";
-
+ 
   const headerElement = document.getElementById("main-header");
+  
   const headerTemplate = await loadTemplate(headerPath);
+  
+  
   renderWithTemplate(headerTemplate.innerHTML, headerElement);
 
   const footerElement = document.getElementById("main-footer");
   const footerTemplate = await loadTemplate(footerPath);
   renderWithTemplate(footerTemplate.innerHTML, footerElement);
+  numberOfItemsFunction(dataLoad);
+  
 }
 
 /**
@@ -183,4 +189,45 @@ export function getDiscount(item) {
   } else {
     return 0;
   }
+}
+// Adding a superscript number of items to the cart logo.
+
+export function numberOfItemsFn(dataLoad){
+  const cartLogoContainerElementId = dataLoad[0]
+  const getLocalStorageFn = dataLoad[1];
+  const localStorageKey = dataLoad[2];
+  
+  const classNumber = dataLoad[3];
+  const cartContainer = document.getElementById(cartLogoContainerElementId);
+  
+  
+  const number =  document.createElement("p");
+  number.setAttribute("class", classNumber);
+  number.setAttribute("id", "number");
+  const lStorage = getLocalStorageFn(localStorageKey);
+  
+  const numberOfItems = lStorage.length;
+  
+  number.textContent = `${numberOfItems}`;
+
+  cartContainer.appendChild(number);
+}
+
+//Update the number of items.
+export function updateNumberofItems(dataLoad, qsFn){
+  
+  const getLocalStorageFn = dataLoad[1];
+  const localStorageKey = dataLoad[2];
+  const number = qsFn("#number");
+  
+  
+  
+  
+  const lStorage = getLocalStorageFn(localStorageKey);
+  
+  const numberOfItems = lStorage.length;
+  
+  
+  number.textContent = numberOfItems;
+
 }
