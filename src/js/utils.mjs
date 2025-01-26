@@ -64,15 +64,15 @@ export function setClick(selector, callback) {
 }
 
 /**
- * Get the product id from the URL.
+ * Get the specified value from the URL.
  * @param {*} param
- * @returns {string} The product id
+ * @returns {string} The value of the URL param.
  */
 export function getParam(param) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const product = urlParams.get("product");
-  return product;
+  const value = urlParams.get(param);
+  return value;
 }
 
 /**
@@ -167,7 +167,7 @@ export async function loadHeaderFooter(dataLoad, numberOfItemsFunction) {
  * @param {number} item.FinalPrice - The final price of the item.
  * @returns {boolean} - Returns true if the item is discounted, false otherwise.
  */
-export function isDiscounted(item) {
+export function isDiscounted(item) { 
   return (
     typeof item.SuggestedRetailPrice === "number" &&
     typeof item.FinalPrice === "number" &&
@@ -190,6 +190,10 @@ export function getDiscount(item) {
     return 0;
   }
 }
+
+export function capitalizeString(string) {
+  return string[0].toUpperCase() + string.slice(1);
+
 // Adding a superscript number of items to the cart logo.
 
 export function numberOfItemsFn(dataLoad){
