@@ -119,13 +119,25 @@ export function renderWithTemplate(template, parent, data, callback) {
   }
 }
 
-function convertToText(response) {
+/**Converts response to text with error handling */
+export function convertToText(response) {
   if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
+    const error = `Error: ${response.status} - ${response.statusText}`;
+    console.error(error);
+    throw new Error(error);
   }
   return response.text();
 }
 
+/**Converts response to json with error handling */
+export function convertToJson(response) {
+  if (!response.ok) {
+    const error = `Error: ${response.status} - ${response.statusText}`;
+    console.error(error);
+    throw new Error(error);
+  }
+  return response.json();
+}
 /**
  * Load a template from a file
  * @param {string} path Path to the template
@@ -193,6 +205,7 @@ export function getDiscount(item) {
 
 export function capitalizeString(string) {
   return string[0].toUpperCase() + string.slice(1);
+}
 
 // Adding a superscript number of items to the cart logo.
 
