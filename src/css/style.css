@@ -133,18 +133,31 @@ button {
   text-decoration: none;
   color: var(--dark-grey);
 }
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6em;
+
+/* Product category icon styles */
+.product-categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 2em;
   padding: 0.25em;
   list-style-type: none;
   text-align: center;
 }
-.product-grid a {
+
+.product-categories li {
+  flex: 1 1 calc(20% - 0.5em);
+  max-width: calc(20% - 0.5em);
+}
+
+.product-categories a {
   text-decoration: none;
   color: var(--dark-grey);
 }
+.product-categories li h2 {
+  font-size: clamp(0.75em, 2.5vw + 0.25em, 1.5em);
+}
+/* End product category icon styles */
 
 /* Styles for product lists */
 .product-card {
@@ -183,6 +196,58 @@ button {
 .product-detail img {
   width: 100%;
 }
+
+/* Form styles */
+form {
+  max-width: 600px;
+  margin: auto;
+  padding: 1em;
+  border: 1px solid var(--light-grey);
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+form fieldset {
+  border: none;
+  margin-bottom: 1em;
+}
+
+form legend {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+
+form input {
+  width: 100%;
+  padding: 0.5em;
+  margin-bottom: 1em;
+  border: 1px solid var(--light-grey);
+  border-radius: 3px;
+  font-size: 1em;
+}
+
+form button {
+  padding: 0.75em 1.5em;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: var(--primary-color);
+  color: var(--dark-grey);
+}
+/* End form styles */
 
 /* Start cart list card styles */
 .cart-card {
