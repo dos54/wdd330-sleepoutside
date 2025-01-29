@@ -1,10 +1,10 @@
-import ProductData from "./ProductData.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 import ProductList from "./ProductList.mjs";
 import Alert from "./Alert.mjs";
 import { capitalizeString, getParam, loadHeaderFooter } from "./utils.mjs";
 
 // Initialize product data
-const dataSource = new ProductData();
+const dataSource = new ExternalServices();
 
 // Select the DOM element where the product list will render
 const liElement = document.querySelector(".product-list");
