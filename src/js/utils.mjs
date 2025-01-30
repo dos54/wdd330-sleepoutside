@@ -189,6 +189,7 @@ export function updateCartDisplay() {
   }
 
   numberElement.textContent = cartData.length;
+  numberElement.style.display = cartData.length <= 0 ? "none" : "flex";
 }
 
 /**
