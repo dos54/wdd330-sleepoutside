@@ -1,10 +1,9 @@
 import {
   loadHeaderFooter,
-  numberOfItemsFn,
   getLocalStorage,
 } from "./utils.mjs";
 
 const dataLoad = ["cart", getLocalStorage, "so-cart", "cartNumberStyle"];
 
 // Load reusable header and footer components
-loadHeaderFooter(dataLoad, numberOfItemsFn);
+loadHeaderFooter();

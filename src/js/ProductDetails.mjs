@@ -1,4 +1,4 @@
-import { addToLocalStorage, getDiscount, isDiscounted, getLocalStorage, qs, updateNumberofItems } from "./utils.mjs";
+import { addToLocalStorage, getDiscount, isDiscounted, getLocalStorage, qs, updateCartDisplay } from "./utils.mjs";
 
 function productDetailsTemplate(product) {
   return `
@@ -58,7 +58,7 @@ export default class ProductDetails {
 
     addToLocalStorage("so-cart", cartItem);
     const dataLoad = ["cart", getLocalStorage, "so-cart", "cartNumberStyle"];
-    updateNumberofItems(dataLoad, qs);
+    updateCartDisplay(dataLoad, qs);
   }
 
   renderProductDetails(selector) {

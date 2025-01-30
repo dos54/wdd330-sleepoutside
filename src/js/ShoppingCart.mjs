@@ -1,6 +1,10 @@
-import { getLocalStorage, setLocalStorage, getDiscount, updateNumberofItems, qs } from "./utils.mjs";
-
-
+import {
+  getLocalStorage,
+  setLocalStorage,
+  getDiscount,
+  qs,
+  updateCartDisplay
+} from "./utils.mjs";
 
 /**
  * ShoppingCart class to manage a shopping cart's functionality.
@@ -85,8 +89,7 @@ export default class ShoppingCart {
     this.items = this.items.filter((item) => item.cartItemId !== cartItemId); // Filter out the removed item.
     setLocalStorage(this.localStorageKey, this.items); // Update localStorage with the new cart data.
     this.updateCartSummary(); // Update the cart summary display.
-    const dataLoad = ["cart", getLocalStorage, "so-cart", "cartNumberStyle"];
-    updateNumberofItems(dataLoad, qs);
+    updateCartDisplay();
   }
 
   /**

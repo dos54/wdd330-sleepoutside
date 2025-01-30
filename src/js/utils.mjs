@@ -151,24 +151,44 @@ export async function loadTemplate(path) {
 }
 
 /**
- * Load the headers and footers
+ * Load and render the header and footer
  */
-export async function loadHeaderFooter(dataLoad, numberOfItemsFunction) {
+export async function loadHeaderFooter() {
   const headerPath = "/partials/header.html";
   const footerPath = "/partials/footer.html";
- 
-  const headerElement = document.getElementById("main-header");
-  
-  const headerTemplate = await loadTemplate(headerPath);
-  
-  
-  renderWithTemplate(headerTemplate.innerHTML, headerElement);
 
+  const headerElement = document.getElementById("main-header");
   const footerElement = document.getElementById("main-footer");
-  const footerTemplate = await loadTemplate(footerPath);
+
+  // Load and render templates
+  const [headerTemplate, footerTemplate] = await Promise.all([
+    loadTemplate(headerPath),
+    loadTemplate(footerPath),
+  ]);
+
+  renderWithTemplate(headerTemplate.innerHTML, headerElement);
   renderWithTemplate(footerTemplate.innerHTML, footerElement);
-  numberOfItemsFunction(dataLoad);
-  
+
+  // Update cart UI after rendering the header
+  updateCartDisplay();
+}
+
+/**
+ * Display the number of items in the cart
+ */
+export function updateCartDisplay() {
+  const cartContainer = document.getElementById("cart-icon"); // More intuitive ID
+  const cartData = getLocalStorage("so-cart") || [];
+
+  // Remove existing number display if it exists
+  let numberElement = document.getElementById("cart-count");
+  if (!numberElement) {
+    numberElement = document.createElement("p");
+    numberElement.setAttribute("id", "cart-count");
+    cartContainer.appendChild(numberElement);
+  }
+
+  numberElement.textContent = cartData.length;
 }
 
 /**
@@ -205,46 +225,4 @@ export function getDiscount(item) {
 
 export function capitalizeString(string) {
   return string[0].toUpperCase() + string.slice(1);
-}
-
-// Adding a superscript number of items to the cart logo.
-
-export function numberOfItemsFn(dataLoad){
-  const cartLogoContainerElementId = dataLoad[0]
-  const getLocalStorageFn = dataLoad[1];
-  const localStorageKey = dataLoad[2];
-  
-  const classNumber = dataLoad[3];
-  const cartContainer = document.getElementById(cartLogoContainerElementId);
-  
-  
-  const number =  document.createElement("p");
-  number.setAttribute("class", classNumber);
-  number.setAttribute("id", "number");
-  const lStorage = getLocalStorageFn(localStorageKey);
-  
-  const numberOfItems = lStorage.length;
-  
-  number.textContent = `${numberOfItems}`;
-
-  cartContainer.appendChild(number);
-}
-
-//Update the number of items.
-export function updateNumberofItems(dataLoad, qsFn){
-  
-  const getLocalStorageFn = dataLoad[1];
-  const localStorageKey = dataLoad[2];
-  const number = qsFn("#number");
-  
-  
-  
-  
-  const lStorage = getLocalStorageFn(localStorageKey);
-  
-  const numberOfItems = lStorage.length;
-  
-  
-  number.textContent = numberOfItems;
-
 }
