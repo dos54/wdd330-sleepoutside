@@ -1,12 +1,11 @@
 import CheckoutProcess from "./CheckoutProcess.mjs";
 import {
   loadHeaderFooter,
-  numberOfItemsFn,
   getLocalStorage,
 } from "./utils.mjs";
 
 const dataLoad = ["cart", getLocalStorage, "so-cart", "cartNumberStyle"];
-loadHeaderFooter(dataLoad, numberOfItemsFn);
+loadHeaderFooter();
 
 const checkoutProcess = new CheckoutProcess("so-cart", "#order-summary");
 checkoutProcess.init();
