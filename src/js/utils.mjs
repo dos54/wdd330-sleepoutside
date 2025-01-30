@@ -1,3 +1,5 @@
+const LOCAL_STORAGE_KEY = "so-cart"
+
 /**
  * Selects and returns the first element that matches the given CSS selector within the specified parent element.
  *
@@ -15,7 +17,7 @@ export function qs(selector, parent = document) {
  * @param {string} key - The key used to retrieve the data.
  * @returns {Array|Object} The parsed data from localStorage, or an empty array if no data exists.
  */
-export function getLocalStorage(key) {
+export function getLocalStorage(key = LOCAL_STORAGE_KEY) {
   return JSON.parse(localStorage.getItem(key)) || [];
 }
 
@@ -26,7 +28,7 @@ export function getLocalStorage(key) {
  * @param {string} key - The key under which the data will be stored.
  * @param {*} data - The data to store, which will be serialized to JSON.
  */
-export function addToLocalStorage(key, data) {
+export function addToLocalStorage(data, key = LOCAL_STORAGE_KEY) {
   if (localStorage.getItem(key) == null) {
     let dataArray = [data];
     localStorage.setItem(key, JSON.stringify(dataArray));
@@ -43,9 +45,9 @@ export function addToLocalStorage(key, data) {
  * @param {string} key - The key under which the data will be stored
  * @param {*} data - The data to store, as JSON
  */
-export function setLocalStorage(key, data) {
-  let dataArray = data
-  localStorage.setItem(key, JSON.stringify(dataArray))
+export function setLocalStorage(data, key = LOCAL_STORAGE_KEY) {
+  let dataArray = data;
+  localStorage.setItem(key, JSON.stringify(dataArray));
 }
 
 /**
@@ -177,10 +179,10 @@ export async function loadHeaderFooter() {
  * Display the number of items in the cart
  */
 export function updateCartDisplay() {
-  const cartContainer = document.getElementById("cart-icon"); // More intuitive ID
-  const cartData = getLocalStorage("so-cart") || [];
+  const cartContainer = document.getElementById("cart-icon");
+  const cartData = getLocalStorage() || [];
+  let numberInCart = 0;
 
-  // Remove existing number display if it exists
   let numberElement = document.getElementById("cart-count");
   if (!numberElement) {
     numberElement = document.createElement("p");
@@ -188,8 +190,11 @@ export function updateCartDisplay() {
     cartContainer.appendChild(numberElement);
   }
 
-  numberElement.textContent = cartData.length;
-  numberElement.style.display = cartData.length <= 0 ? "none" : "flex";
+  cartData.forEach(item => {
+    numberInCart += item.numberInCart
+  });
+  numberElement.textContent = numberInCart;
+  numberElement.style.display = numberInCart <= 0 ? "none" : "flex";
 }
 
 /**
@@ -226,4 +231,68 @@ export function getDiscount(item) {
 
 export function capitalizeString(string) {
   return string[0].toUpperCase() + string.slice(1);
+}
+
+/**
+ * Increments the quantity of a given product in the shopping cart.
+ * If the product already exists, its `numberInCart` is increased.
+ * Otherwise, the product is added as a new entry with `numberInCart = 1`.
+ *
+ * @function incrementProduct
+ * @param {Object} product - The product object to add/update in the cart.
+ * @param {string} product.Id - The unique identifier of the product.
+ * @returns {void} This function does not return anything.
+ *
+ * @throws {Error} If `getLocalStorage` or `setLocalStorage` fails.
+ *
+ * @example
+ * // Assuming product = { Id: "123", name: "Widget" }
+ * incrementProduct(product);
+ * // Cart now contains the product with an updated quantity.
+ */
+export function incrementProduct(product) {
+  if (!product || !product.Id) {
+    console.error("Invalid product passed to incrementProduct");
+    return;
+  }
+
+  let cart = getLocalStorage()
+
+  let existingItem = cart.find(item => item && item.Id === product.Id);
+
+  if (existingItem) {
+    existingItem.numberInCart += 1;
+  } else {
+    const cartItem = {
+      ...product,
+      cartItemId: Date.now() + Math.random().toString(36).substring(2, 9), // Unique ID per cart entry
+      numberInCart: 1,
+    };
+    cart.push(cartItem);
+  }
+  
+  setLocalStorage(cart); // Save updated cart
+  updateCartDisplay();
+}
+
+export function decrementProduct(product) {
+    if (!product || !product.Id) {
+      console.error("Invalid product passed to incrementProduct");
+      return;
+    }
+
+      let cart = getLocalStorage();
+
+      let existingItem = cart.find((item) => item && item.Id === product.Id);
+
+      if (existingItem) {
+        existingItem.numberInCart -= 1;
+      }
+
+      if (existingItem && existingItem.numberInCart <=0 ) {
+        cart = cart.filter(item => item.Id !== existingItem.Id)
+      }
+
+      setLocalStorage(cart); // Save updated cart
+      updateCartDisplay();
 }
