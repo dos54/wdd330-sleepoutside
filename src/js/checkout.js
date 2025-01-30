@@ -1,7 +1,6 @@
 import CheckoutProcess from "./CheckoutProcess.mjs";
 import {
   loadHeaderFooter,
-  numberOfItemsFn,
   getLocalStorage,
 } from "./utils.mjs";
 
