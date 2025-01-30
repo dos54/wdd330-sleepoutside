@@ -1,6 +1,11 @@
-import { getLocalStorage, setLocalStorage, getDiscount, updateNumberofItems, qs } from "./utils.mjs";
-
-
+import {
+  getLocalStorage,
+  setLocalStorage,
+  getDiscount,
+  updateCartDisplay,
+  incrementProduct,
+  decrementProduct
+} from "./utils.mjs";
 
 /**
  * ShoppingCart class to manage a shopping cart's functionality.
@@ -45,9 +50,13 @@ export default class ShoppingCart {
             <h2 class="card__name">${item.Name}</h2>
         </a>
         <p class="cart-card__color">${item.Colors?.[0]?.ColorName || "N/A"}</p>
-        <p class="cart-card__quantity">qty: 1</p>
-        <p class="cart-card__price">$${item.FinalPrice}</p>
-        <button>Remove Item</button>
+        <p class="cart-card__quantity">
+          <button class="button-minus">−</button>
+          <span class="quantity">${item.numberInCart}</span>
+          <button class="button-plus">+</button>
+        </p>
+        <p class="cart-card__price">$${this.calculateTotalItemPrice(item).toFixed(2)}</p>
+        <button class="remove-button">Remove Item</button>
         `;
 
     return newItem;
@@ -64,13 +73,33 @@ export default class ShoppingCart {
     liElement.id = item.cartItemId; // Assign unique cart item ID.
     liElement.classList = "cart-card divider"; // Add appropriate styling classes.
     liElement.innerHTML = this.cartItemTemplate(item); // Set inner HTML using the template.
-
+    const quantityElement = liElement.querySelector(".quantity");
+    const cardPrice = liElement.querySelector(".cart-card__price")
+    
     // Add event listener to remove the item when the "Remove Item" button is clicked.
-    const removeButton = liElement.querySelector("button");
+    const removeButton = liElement.querySelector("button.remove-button");
     removeButton.addEventListener("click", () => {
       this.removeItem(item.cartItemId); // Remove from cart data.
       liElement.remove(); // Remove from DOM.
     });
+    
+    const addButton = liElement.querySelector(".button-plus")
+    addButton.addEventListener("click", () => {
+      incrementProduct(item);
+      quantityElement.textContent = ++item.numberInCart;
+      cardPrice.textContent = `$${this.calculateTotalItemPrice(item).toFixed(2)}`;
+      this.updateCartSummary();
+    })
+
+    const minusButton = liElement.querySelector(".button-minus")
+    minusButton.addEventListener("click", () => {
+      if (item.numberInCart > 0) {
+        decrementProduct(item);
+        quantityElement.textContent = --item.numberInCart;
+        cardPrice.textContent = `$${this.calculateTotalItemPrice(item).toFixed(2)}`;
+        this.updateCartSummary()
+      }
+    })
 
     return liElement;
   }
@@ -83,10 +112,13 @@ export default class ShoppingCart {
    */
   removeItem(cartItemId) {
     this.items = this.items.filter((item) => item.cartItemId !== cartItemId); // Filter out the removed item.
-    setLocalStorage(this.localStorageKey, this.items); // Update localStorage with the new cart data.
+    setLocalStorage( this.items, this.localStorageKey); // Update localStorage with the new cart data.
     this.updateCartSummary(); // Update the cart summary display.
-    const dataLoad = ["cart", getLocalStorage, "so-cart", "cartNumberStyle"];
-    updateNumberofItems(dataLoad, qs);
+    updateCartDisplay();
+  }
+
+  calculateTotalItemPrice(item) {
+    return item.FinalPrice * item.numberInCart;
   }
 
   /**
@@ -98,7 +130,7 @@ export default class ShoppingCart {
     const cartItems = getLocalStorage(this.localStorageKey); // Retrieve cart items.
     let totalPrice = 0;
     cartItems.forEach((item) => {
-      totalPrice += item.FinalPrice; // Sum up item prices.
+      totalPrice += this.calculateTotalItemPrice(item); // Sum up item prices.
     });
     return totalPrice;
   }
@@ -112,7 +144,7 @@ export default class ShoppingCart {
     let totalDiscount = 0;
     const cartItems = this.items; // Get cart items.
     cartItems.forEach((item) => {
-      totalDiscount += getDiscount(item); // Calculate discount for each item.
+      totalDiscount += getDiscount(item) * item.numberInCart; // Calculate discount for each item.
     });
     return totalDiscount;
   }

@@ -1,4 +1,4 @@
-import { addToLocalStorage, getDiscount, isDiscounted, getLocalStorage, qs, updateNumberofItems } from "./utils.mjs";
+import { isDiscounted, getLocalStorage, setLocalStorage, incrementProduct } from "./utils.mjs";
 
 function productDetailsTemplate(product) {
   return `
@@ -50,15 +50,13 @@ export default class ProductDetails {
       .addEventListener("click", this.addProductToCart.bind(this));
   }
 
+  /**
+   * Adds the current product to the shopping cart.
+   * If the product already exists in the cart, its quantity (`numberInCart`) is increased.
+   * Otherwise, the product is added as a new entry.
+   */
   addProductToCart() {
-    const cartItem = {
-      ...this.product,
-      cartItemId: Date.now() + Math.random().toString(36).substring(2, 9), // Solve the issue of items having the same ID by assigning the product a unique id when added to the cart
-    };
-
-    addToLocalStorage("so-cart", cartItem);
-    const dataLoad = ["cart", getLocalStorage, "so-cart", "cartNumberStyle"];
-    updateNumberofItems(dataLoad, qs);
+    incrementProduct(this.product)
   }
 
   renderProductDetails(selector) {
@@ -71,9 +69,12 @@ export default class ProductDetails {
     const listPrice = element.querySelector(".product-card__price");
     if (isDiscounted(this.product)) {
       listPrice.classList.add("discounted");
-      listPrice.insertAdjacentHTML("afterend", `
+      listPrice.insertAdjacentHTML(
+        "afterend",
+        `
         <p class="discounted-price">$${this.product.FinalPrice}</p>
-        `);
+        `,
+      );
     }
   }
 }
