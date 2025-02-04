@@ -296,3 +296,49 @@ export function decrementProduct(product) {
       setLocalStorage(cart); // Save updated cart
       updateCartDisplay();
 }
+
+
+/**
+ * Displays an alert message at the top of the main content area.
+ *
+ * @param {string} message - The message to be displayed in the alert.
+ * @param {boolean} [scroll=true] - Whether to scroll to the top of the page after displaying the alert.
+ *                                  Defaults to true.
+ * @param {number} [durration=0] - The time in milliseconds to display the alert before removing it.
+ *                                 By default, the alert will not be removed.
+ */
+export function alertMessage(message, scroll=true, durration=0) {
+  const alert = document.createElement("div");
+  alert.classList.add("alert");
+  
+  const alertMessage = document.createElement("p");
+  const removeButton = document.createElement("span");
+
+  alertMessage.textContent = message;
+  removeButton.textContent = "X";
+
+  removeButton.addEventListener("click", event => {
+      event.target.parentElement.remove();
+  })
+alert.append(alertMessage, removeButton);
+
+
+  document.querySelector("main").insertAdjacentElement("afterbegin", alert);
+
+  if (scroll) {
+    window.scrollTo(0,0);
+  }
+
+  if (durration) {
+    setTimeout(() => {
+      alert.remove();
+    }, durration);
+  }
+}
+
+/**
+ * Removes all alerts from the page.
+ */
+export function removeAllAlerts() {
+  document.querySelectorAll(".alert").forEach(alert => alert.remove());
+}

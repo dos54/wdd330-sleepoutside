@@ -1,4 +1,4 @@
-import { isDiscounted, getLocalStorage, setLocalStorage, incrementProduct } from "./utils.mjs";
+import { isDiscounted, getLocalStorage, setLocalStorage, incrementProduct, alertMessage } from "./utils.mjs";
 
 function productDetailsTemplate(product) {
   return `
@@ -57,6 +57,7 @@ export default class ProductDetails {
    */
   addProductToCart() {
     incrementProduct(this.product)
+    alertMessage("Item added to cart.", false, 5000);
   }
 
   renderProductDetails(selector) {
