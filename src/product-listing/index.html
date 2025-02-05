@@ -11,7 +11,19 @@
     <header class="divider" id="main-header"></header>
     <main class="divider">
       <section class="products">
-        <h2>Top</h2>
+        <div class="products-header">
+          <h2>Top</h2>
+          <div class="sorting-container">
+            <label for="sorting">Sort by: </label>
+            <select id="sorting">
+              <option value="" selected disabled hidden>Sort by...</option>
+              <option value="productName">Name</option>
+              <option value="brandName">Brand</option>
+              <option value="priceAscending">Price Ascending</option>
+              <option value="priceDescending">Price Descending</option>
+            </select>
+          </div>
+        </div>
         <ul class="product-list"></ul>
       </section>
     </main>

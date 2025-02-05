@@ -29,7 +29,23 @@ title.textContent = `Sleep Outside | Top ${formatedCategoryString}`;
 h2.innerText = `Top ${formatedCategoryString}`;
 
 // Render the products
-listing.init();
+// listing.init();
+
+const sorting = document.querySelector("#sorting");
+
+(async function () {
+  await listing.init();
+  // console.log(listing.dataList);
+
+  listing.sortList(sorting.value);
+})();
 
 const alert = new Alert();
 alert.init();
+
+sorting.addEventListener("change", (event) => {
+  listing.sortList(event.target.value);
+});
+
+// console.log("children");
+// console.log(liElement.children);
