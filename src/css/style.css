@@ -213,6 +213,24 @@ button:hover {
 }
 /* End product list card */
 
+.products-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sorting-container {
+  display: flex;
+  align-items: center;
+}
+
+#sorting {
+  margin-left: 0.5em;
+  padding: 0.25em;
+  font-size: var(--font-base);
+  border: 1px solid var(--light-grey);
+  border-radius: 3px;
+}
+
 .product-detail {
   padding: 1em;
   max-width: 500px;
@@ -273,7 +291,32 @@ form button:hover {
   background-color: var(--primary-color);
   color: var(--dark-grey);
 }
+
+input[type="number"] {
+  appearance: textfield;
+}
 /* End form styles */
+
+/* Start alert styles */
+.alert {
+  background-color: var(--primary-color);
+  color: var(--dark-grey);
+  padding: 0.25em;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alert p {
+  margin: 0;
+}
+
+.alert span {
+  cursor: pointer;
+  font-weight: bold;
+}
+/* End alert styles */
 
 /* Start cart list card styles */
 .cart-card {
@@ -282,7 +325,7 @@ form button:hover {
   font-size: var(--small-font);
   /* max-height: 120px; */
   align-items: center;
-  padding: .5rem 0;
+  padding: 0.5rem 0;
 }
 
 .cart-card__image {
@@ -321,7 +364,6 @@ form button:hover {
   font-weight: bold;
   overflow: hidden;
 }
-
 
 .button-minus,
 .button-plus {

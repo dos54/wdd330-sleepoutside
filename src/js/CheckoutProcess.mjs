@@ -1,5 +1,5 @@
 import ExternalServices from "./ExternalServices.mjs";
-import { convertToJson, getLocalStorage } from "./utils.mjs";
+import { alertMessage, convertToJson, getLocalStorage, removeAllAlerts, setLocalStorage } from "./utils.mjs";
 
 const services = new ExternalServices;
 
@@ -16,15 +16,7 @@ function packageItems(items) {
     };
 
     const simplifiedItems = items.map(template);
-    return simplifiedItems
-    // let isUnique = true
-
-    // compressedItems = simplifiedItems.map((item, i, items) => {
-    //     if (isUnique) {
-    //         const repeatedItems = items.filter(filterItem => filterItem.Id == item.id)
-    //         item
-    //     }
-    // })
+    return simplifiedItems;
 }
 
 
@@ -46,6 +38,7 @@ export default class CheckoutProcess {
         this.shipping = 0;
         this.tax = 0;
         this.orderTotal = 0;
+        this.numberOfItems = 0;
     }
 
     init() {
@@ -56,14 +49,19 @@ export default class CheckoutProcess {
 
     calculateItemSummary() {
         this.cart.forEach(item => {
-            this.subtotal += item.FinalPrice
-            console.log(this.subtotal)
+            this.subtotal += item.FinalPrice * item.numberInCart
+            // console.log(this.subtotal);
         })
+
+        this.numberOfItems = 0;
+        this.cart.forEach(item => {
+            this.numberOfItems += item.numberInCart
+        });
 
         
 
         this.output.insertAdjacentHTML("afterbegin", 
-            `<p>You have ${this.cart.length} item(s) in your cart.</p>
+            `<p>You have ${this.numberOfItems} item(s) in your cart.</p>
             <p>Subtotal: $${this.subtotal.toFixed(2)}</p>
             <p id="shipping">Shipping:</p>
             <p id="tax">Tax:</p>
@@ -73,7 +71,7 @@ export default class CheckoutProcess {
 
     calculateOrderTotal() {
         if (this.cart.length) {
-            this.shipping = this.cart.length*2 + 8;
+            this.shipping = this.numberOfItems*2 + 8;
         } else {
             this.displayOrderTotals()
             return
@@ -98,22 +96,41 @@ export default class CheckoutProcess {
     }
 
     async checkout() {
-        // build the data object from the calculated fields, the items in the cart, and the information entered into the form
-        const form = document.forms.checkout;
+        try {
+            // build the data object from the calculated fields, the items in the cart, and the information entered into the form
+            const form = document.forms.checkout;
 
-        const jsonData = formDataToJSON(form);
-        jsonData.orderDate = new Date();
-        jsonData.items = packageItems(this.cart);
-        jsonData.orderTotal = this.orderTotal;
-        jsonData.shipping = this.shipping;
-        jsonData.tax = this.tax;
+            const jsonData = formDataToJSON(form);
+            jsonData.orderDate = new Date();
+            jsonData.items = packageItems(this.cart);
+            jsonData.orderTotal = this.orderTotal;
+            jsonData.shipping = this.shipping;
+            jsonData.tax = this.tax;
 
-        console.log(jsonData);
-    
-        // call the checkout method in our ExternalServices module and send it our data object.
-        const response = await services.checkout(jsonData).then(convertToJson);
+            console.log(jsonData);
+        
+            // call the checkout method in our ExternalServices module and send it our data object.
+            const response = await services.checkout(jsonData).then(convertToJson);
 
-        console.log(response);
+            console.log(response);
+            
 
-      }
+            // if the response is successful, clear the cart and redirect to success 
+            if (response.message === "Order Placed") {
+                setLocalStorage([], this.key);
+                window.location.href = "success.html";
+
+                // console.log("working order");
+            } else {
+                removeAllAlerts();
+                alertMessage("There was an error processing your order. Please try again later.");
+            }
+
+        } catch (err) {
+            console.log("Help, something's broken!");
+            console.error(err);
+            removeAllAlerts();
+            alertMessage("There was an error processing your order. Please try again later.");
+        }
+    }
 }
